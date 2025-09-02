@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseAI - Gemini</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Root Variables for Theming --- */
+        :root {
+            --background-start-rgb: 240, 242, 245;
+            --background-end-rgb: 220, 225, 230;
+            --card-background-rgb: 255, 255, 255;
+            --primary-text-color: #1a202c;
+            --secondary-text-color: #5a6474;
+            --primary-accent-color: #4A90E2;
+            --primary-accent-hover: #357ABD;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+
+        /* --- General Body & Typography --- */
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
+            color: var(--primary-text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* To accommodate footer */
+        }
+        
+        main {
+            flex: 1; /* Allows main content to grow and push footer down */
+            display: flex;
+            align-items: center;
+        }
+
+        /* --- Main Content Card --- */
+        .main-content-card {
+            background-color: rgba(var(--card-background-rgb), 0.9);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px -5px var(--shadow-color), 0 10px 10px -5px var(--shadow-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .main-content-card:hover {
+            box-shadow: 0 20px 30px -10px var(--shadow-color), 0 15px 15px -10px var(--shadow-color);
+            transform: translateY(-5px);
+        }
+
+        /* --- Headings & Lead Text --- */
+        .display-5 {
+            font-weight: 700;
+            color: var(--primary-text-color);
+        }
+
+        .lead {
+            font-weight: 400;
+            color: var(--secondary-text-color);
+        }
+
+        /* --- Form Elements --- */
+        .form-control {
+            background-color: rgb(var(--background-start-rgb));
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            color: var(--primary-text-color);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            border-color: var(--primary-accent-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
+            outline: none;
+        }
+
+        /* --- Primary Button --- */
+        .btn-primary {
+            background-color: var(--primary-accent-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.85rem 1.5rem;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        /* --- Response Area --- */
+        .response-container {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            line-height: 1.7;
+        }
+        
+        .response-container h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* --- Action Buttons (Copy, Read Aloud, etc.) --- */
+        #read-aloud-btn {
+            font-weight: 500;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        
+        .btn-success { background-color: var(--success-color); border:none; }
+        .btn-danger { background-color: var(--danger-color); border:none; }
+
+        .btn-outline-dark {
+            color: var(--secondary-text-color);
+            border-color: #d1d5db;
+            background-color: #fff;
+            border-radius: 6px;
+            margin-right: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-outline-dark:hover {
+            background-color: #f3f4f6;
+            color: var(--primary-text-color);
+            border-color: #a1aab7;
+            transform: translateY(-1px);
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 1.5rem 0;
+            background-color: transparent;
+            color: var(--secondary-text-color);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--secondary-text-color);
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+            margin: 0 0.75rem;
+        }
+
+        footer a:hover {
+            color: var(--primary-accent-color);
+        }
+
+        footer .bi {
+            font-size: 1.5rem; /* Makes icons larger */
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <div class="d-none d-md-flex container my-4">
+            <div class="row flex-grow-1 w-100 justify-content-center align-items-center">
+
+                <div class="col-md-10 col-lg-8 p-4 p-md-5 main-content-card">
+                    {% if generated_text %}
+                    <div class="text-center mb-4">
+                        <h6 class="display-5">PulseAI</h6>
+                        <p class="lead text-muted">Your AI companion — For a quick chat, just ask your question here.</p>
+                    </div>
+                    <form action="/" method="post">
+                        <div class="mb-3">
+                            <textarea class="form-control" name="prompt" rows="4" placeholder="Type your question here...">{{ user_prompt }}</textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Generate Response</button>
+                        </div>
+                    </form>
+                    <div class="response-container">
+                        <h5>Response:</h5>
+                        <button id="read-aloud-btn" class="btn btn-success mb-3">🔊 Read Aloud</button>
+                        <div id="response-text">{{ generated_text | safe }}</div>
+
+                        <hr class="my-3">
+
+                        <form action="/" method="post" style="display: inline-block;">
+                            <textarea class="form-control" name="prompt" rows="4" style="display: none;" placeholder="Type your question here...">{{ user_prompt }}</textarea>
+                            <button class="btn btn-sm btn-outline-dark" type="submit" title="Regenerate">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+                                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
+                                </svg>
+                            </button>
+                        </form>
+
+                        <button class="btn btn-sm btn-outline-dark" onclick="copyText()" title="Copy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                            </svg>
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-dark" title="Dislike">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down-fill" viewBox="0 0 16 16">
+                                <path d="M6.956 14.534c.065.936.952 1.659 1.908 1.42l.261-.065a1.38 1.38 0 0 0 1.012-.965c.22-.816.533-2.512.062-4.51q.205.03.443.051c.713.065 1.669.071 2.516-.211.518-.173.994-.68 1.2-1.272a1.9 1.9 0 0 0-.234-1.734c.058-.118.103-.242.138-.362.077-.27.113-.568.113-.856 0-.29-.036-.586-.113-.857a2 2 0 0 0-.16-.403c.169-.387.107-.82-.003-1.149a3.2 3.2 0 0 0-.488-.9c.054-.153.076-.313.076-.465a1.86 1.86 0 0 0-.253-.912C13.1.757 12.437.28 11.5.28H8c-.605 0-1.07.08-1.466.217a4.8 4.8 0 0 0-.97.485l-.048.029c-.504.308-.999.61-2.068.723C2.682 1.815 2 2.434 2 3.279v4c0 .851.685 1.433 1.357 1.616.849.232 1.574.787 2.132 1.41.56.626.914 1.28 1.039 1.638.199.575.356 1.54.428 2.591" />
+                            </svg>
+                        </button>
+                        
+                        <button class="btn btn-sm btn-outline-dark" title="Like">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
+                            </svg>
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="text-center mb-4">
+                        <h1 class="display-5">PulseAI</h1>
+                        <p class="lead">Your AI companion — ask anything, get instant insights.</p>
+                    </div>
+                    <form action="/" method="post">
+                        <div class="mb-3">
+                            <textarea class="form-control" name="prompt" rows="4" placeholder="Type your question here...">{{ user_prompt }}</textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Generate Response</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-2">&copy; 2025 PulseAI. All Rights Reserved.</p>
+            <div>
+                <a href="https://linkedin.com/in/siddiqui-maazzz/" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                <a href="https://github.com/maazsiddiqui79/PulseAI" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
+                <a href="https://the-maaz-portfolio.vercel.app" target="_blank" title="Portfolio"><i class="bi bi-briefcase-fill"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const readButton = document.getElementById('read-aloud-btn');
+        const responseTextContainer = document.getElementById('response-text');
+
+        if (readButton && responseTextContainer) {
+            const setButtonState = (isSpeaking) => {
+                if (isSpeaking) {
+                    readButton.innerText = '🛑 Stop Reading';
+                    readButton.classList.remove('btn-success');
+                    readButton.classList.add('btn-danger');
+                } else {
+                    readButton.innerText = '🔊 Read Aloud';
+                    readButton.classList.remove('btn-danger');
+                    readButton.classList.add('btn-success');
+                    window.speechSynthesis.cancel();
+                }
+            };
+
+            setButtonState(false);
+
+            readButton.addEventListener('click', () => {
+                if ('speechSynthesis' in window) {
+                    if (window.speechSynthesis.speaking) {
+                        setButtonState(false);
+                    } else {
+                        const textToSpeak = responseTextContainer.innerText;
+                        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                        utterance.rate = 1.2; // Adjusted for clarity
+                        utterance.onend = () => setButtonState(false);
+                        window.speechSynthesis.speak(utterance);
+                        setButtonState(true);
+                    }
+                } else {
+                    alert("Sorry, your browser does not support text-to-speech.");
+                }
+            });
+        }
+        function copyText() {
+            const text = document.getElementById("response-text").innerText;
+            navigator.clipboard
+                .writeText(text)
+                .then(() => {
+                    alert("Response copied to clipboard!");
+                })
+                .catch((err) => {
+                    console.error("Failed to copy text: ", err);
+                });
+        }
+    </script>
+</body>
+
+</html>
